@@ -1,0 +1,23 @@
+
+<h1>Invoices</h1>
+
+<table class="table table-striped">
+    <thead>
+        <th>#</th>
+        <th>Date</th>
+        <th>Customer</th>
+        <th>Amount</th>
+    </thead>
+    <tbody>
+        <tr ng-repeat="invoice in invoices">
+            <td>
+                <a href="#/invoices/{{invoice.invoiceNumber}}" ng-bind="invoice.invoiceNumber"></a>
+            </td>
+            <td ng-bind="invoice.date | date:'longDate'"></td>
+            <td>
+                <a href="#customers/{{invoice.customer.id}}"  ng-bind="invoice.customer.name"></a>
+            </td>
+            <td ng-bind="invoice.amount | currency:'&euro; '"></td>
+        </tr>
+    </tbody>
+</table>

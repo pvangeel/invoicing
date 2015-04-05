@@ -1,0 +1,69 @@
+<h1>Invoice Detail ({{invoice.invoiceNumber}})</h1>
+
+<h2>Customer</h2>
+
+<form editable-form name="customerForm">
+
+    <div>
+        <label>Name:</label>
+        <span editable-text="invoice.customer.name" e-required e-placeholder="Name">{{ invoice.customer.name }}</span>
+    </div>
+    <div>
+        <label>Address:</label>
+        <div>
+            <span editable-text="invoice.customer.address.street" e-required e-placeholder="Street">{{ invoice.customer.address.street }}</span>
+            <span editable-text="invoice.customer.address.number" e-required e-placeholder="Number">{{ invoice.customer.address.number }}</span>
+        </div>
+        <div>
+            <span editable-text="invoice.customer.address.postalCode" e-required e-placeholder="Postal Code">{{ invoice.customer.address.postalCode }}</span>
+            <span editable-text="invoice.customer.address.city" e-required e-placeholder="City">{{ invoice.customer.address.city }}</span>
+        </div>
+    </div>
+    <div>
+        <label>VAT Number:</label>
+        <span editable-text="invoice.customer.vat" e-required e-placeholder="VAT Number">{{ invoice.customer.vat }}</span>
+    </div>
+
+    <div class="buttons" style="margin-top: 10px;">
+        <!-- button to show form -->
+        <button type="button" class="btn btn-default" ng-click="customerForm.$show()" ng-show="!customerForm.$visible">
+            Edit
+        </button>
+        <!-- buttons to submit / cancel form -->
+      <span ng-show="customerForm.$visible">
+        <button type="submit" class="btn btn-primary" ng-disabled="customerForm.$waiting">
+            Save
+        </button>
+        <button type="button" class="btn btn-default" ng-disabled="customerForm.$waiting" ng-click="customerForm.$cancel()">
+            Cancel
+        </button>
+      </span>
+    </div>
+</form>
+
+<h2>Details</h2>
+
+<table class="table table-striped">
+    <thead>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Amount</th>
+        <th>VAT %</th>
+        <th>Total</th>
+        <th>Actions</th>
+    </thead>
+    <tbody>
+        <tr ng-repeat="invoiceLine in invoice.invoiceLines">
+            <td ng-bind="invoiceLine.product.description"></td>
+            <td ng-bind="invoiceLine.productPrice"></td>
+            <td ng-bind="invoiceLine.amount"></td>
+            <td ng-bind="invoiceLine.vat"></td>
+            <td ng-bind="invoiceLine.total"></td>
+            <td>
+                <a class="btn btn-default btn-xs" ng-click="editInvoiceLine(invoiceLine)"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a class="btn btn-default btn-xs" ng-click=""><span class="glyphicon glyphicon-trash"></span></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<button class="btn btn-default" ng-click="addInvoiceLine()">Add invoice line</button>
