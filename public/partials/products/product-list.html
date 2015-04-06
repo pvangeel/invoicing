@@ -1,0 +1,23 @@
+<h1>Products</h1>
+
+
+<table class="table table-striped">
+    <thead>
+        <th>Id</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>VAT</th>
+    </thead>
+    <tbody>
+        <tr ng-repeat="product in products">
+            <td ng-bind="product.id"></td>
+            <td ng-bind="product.description"></td>
+            <td ng-bind="product.price | currency:'&euro; '"></td>
+            <td>
+                <span ng-bind="product.vat"></span>
+                <span>%</span>
+            </td>
+        </tr>
+    </tbody>
+
+</table>

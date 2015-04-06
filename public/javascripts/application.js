@@ -1,4 +1,4 @@
-invoicing = angular.module('invoicing', ['ngRoute', 'xeditable', 'ui.bootstrap', 'InvoiceModule', 'CustomerModule']);
+invoicing = angular.module('invoicing', ['ngRoute', 'xeditable', 'ui.bootstrap', 'InvoiceModule', 'CustomerModule', 'ProductModule']);
 
 invoicing.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
@@ -17,8 +17,12 @@ invoicing.config(['$routeProvider', function ($routeProvider) {
         .when('/customers/:customerId', {
             templateUrl: 'assets/partials/customers/customer-detail.html',
             controller: 'CustomerDetailController'
-        }).
-        otherwise({
+        })
+        .when('/products', {
+            templateUrl: 'assets/partials/products/product-list.html',
+            controller: 'ProductsController'
+        })
+        .otherwise({
             redirectTo: '/invoices'
         });
 }]);

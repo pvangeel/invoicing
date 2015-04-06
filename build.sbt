@@ -13,6 +13,9 @@ libraryDependencies ++= Seq(
   ws
 )
 
+libraryDependencies ++= Seq(
+  "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
+)
 
 libraryDependencies ++= Seq(
   "org.webjars" %% "webjars-play" % "2.3.0",
