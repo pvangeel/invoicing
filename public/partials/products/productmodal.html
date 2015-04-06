@@ -1,0 +1,25 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()">&times;</button>
+    <h3 class="modal-title">Add product</h3>
+</div>
+<div class="modal-body">
+    <form name="addProduct">
+        <div class="form-group">
+            <label>Description:</label>
+            <input type="text" class="form-control" placeholder="Product description" ng-model="product.description" required/>
+        </div>
+        <div class="form-group">
+            <label>Price:</label>
+            <input type="number" class="form-control" placeholder="Unit price" ng-model="product.price" required/>
+        </div>
+        <div class="form-group">
+            <label>VAT %:</label>
+            <input type="number" class="form-control" placeholder="Unit price" ng-model="product.vat" required/>
+        </div>
+    </form>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-disabled="!addProduct.$valid" ng-click="ok()">Ok</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

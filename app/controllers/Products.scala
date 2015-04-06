@@ -1,7 +1,21 @@
 package controllers
 
-object Products {
+import models.Product
+import play.api.libs.json.Json.toJson
+import play.api.mvc.{Controller, Action}
 
-  case class Product(id: Long, description: String, price: Double)
+object Products extends Controller {
+
+  def productList() = Action { implicit request =>
+    Ok(toJson(Product.findAll)).as("application/json")
+  }
+
+  def addOrUpdateProduct() = Action { implicit request =>
+    request.body.asJson.map(_.as[Product]).map { product =>
+      Ok(toJson(Product.createOrUpdateProduct(product))).as(JSON)
+    }.getOrElse(InternalServerError)
+
+  }
+
 
 }
