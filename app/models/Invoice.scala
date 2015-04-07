@@ -17,6 +17,16 @@ object InvoiceSummary {
 
 object Invoice {
 
+  implicit val invoiceWrites = Json.writes[Invoice]
+  implicit val invoiceReads = Json.reads[Invoice]
+
+
+  def createOrUpdateInvoice(invoice: Invoice) = {
+    println(invoice)
+    invoice
+  }
+
+
   def findAllSummaries = DB.withConnection {
     implicit c =>
       SQL(

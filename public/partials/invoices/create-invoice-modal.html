@@ -5,6 +5,10 @@
 <div class="modal-body">
     <form name="createInvoice">
         <div class="form-group">
+            <label>Invoice number:</label>
+            <input type="text" class="form-control" placeholder="Invoice Number" ng-model="invoice.invoiceNumber" required />
+        </div>
+        <div class="form-group">
             <label>Customer:</label>
             <input type="text"
                    class="form-control"
@@ -15,14 +19,14 @@
         </div>
         <div class="form-group">
             <label>Address:</label>
-            <input type="text" class="form-control" placeholder="Street" ng-model="customer.address.street" required/>
-            <input type="text" class="form-control" placeholder="Number" ng-model="customer.address.number" required/>
-            <input type="text" class="form-control" placeholder="Postal Code" ng-model="customer.address.postalCode" required/>
-            <input type="text" class="form-control" placeholder="City" ng-model="customer.address.city" required/>
+            <input type="text" class="form-control" placeholder="Street" ng-model="invoice.customer.address.street" required/>
+            <input type="text" class="form-control" placeholder="Number" ng-model="invoice.customer.address.number" required/>
+            <input type="text" class="form-control" placeholder="Postal Code" ng-model="invoice.customer.address.postalCode" required/>
+            <input type="text" class="form-control" placeholder="City" ng-model="invoice.customer.address.city" required/>
         </div>
         <div class="form-group">
             <label>VAT number:</label>
-            <input type="text" class="form-control" placeholder="VAT number" ng-model="customer.vat" required/>
+            <input type="text" class="form-control" placeholder="VAT number" ng-model="invoice.customer.vat" required/>
         </div>
 
     </form>

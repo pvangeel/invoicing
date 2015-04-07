@@ -18,14 +18,14 @@ invoiceModule.controller('InvoicesController', ['$scope', '$http', '$location', 
             templateUrl: 'assets/partials/invoices/create-invoice-modal.html',
             controller: ['$scope', '$modalInstance', function($scope, $modalInstance) {
 
-                $scope.customer = {};
+                $scope.invoice = { customer: {}, invoiceNumber: 'test invoice number', invoiceLines: []};
 
                 $scope.cancel = function() {
                     $modalInstance.dismiss('cancel');
                 };
 
                 $scope.ok = function() {
-                    $modalInstance.close($scope.customer);
+                    $modalInstance.close($scope.invoice);
                 };
 
                 $scope.getCustomer = function($viewValue) {
@@ -34,24 +34,26 @@ invoiceModule.controller('InvoicesController', ['$scope', '$http', '$location', 
 
                 $scope.$watch('customertypeahead', function(value) {
                    if(angular.isObject(value)) {
-                       $scope.customer = angular.copy(value);
-                       $scope.$watch('[customer.address, customer.vat]', function() {
-                           if($scope.customer.id && !(angular.equals($scope.customertypeahead.address, $scope.customer.address) && angular.equals($scope.customertypeahead.vat, $scope.customer.vat))) {
-                               delete $scope.customer.id;
+                       $scope.invoice.customer = angular.copy(value);
+                       $scope.$watch('[invoice.customer.address, invoice.customer.vat]', function() {
+                           if($scope.invoice.customer.id && !(angular.equals($scope.customertypeahead.address, $scope.invoice.customer.address) && angular.equals($scope.customertypeahead.vat, $scope.invoice.customer.vat))) {
+                               delete $scope.invoice.customer.id;
                            }
                        }, true);
 
                    } else {
-                       delete $scope.customer.id;
-                       $scope.customer.name = value;
-                       $scope.$watch('customer.address', function() { }, true);
+                       delete $scope.invoice.customer.id;
+                       $scope.invoice.customer.name = value;
+                       $scope.$watch('invoice.customer.address', function() { }, true);
                    }
                 });
 
             }]
         }).result.then(function(result) {
-
-                $location.path('/invoices/' + 123);
+                $http.put('/invoices', result).then(function(response) {
+                    console.log(response.data)
+                });
+                //$location.path('/invoices/' + 123);
             });
     }
 
