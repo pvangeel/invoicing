@@ -2,7 +2,7 @@ package models
 
 import play.api.libs.json.Json
 
-case class InvoiceLine(id: Option[Long], productId: Long, price: BigDecimal, vat: BigDecimal)
+case class InvoiceLine(id: Option[Long], productId: Long, price: BigDecimal, quantity: Long, vat: BigDecimal)
 
 object InvoiceLine {
 

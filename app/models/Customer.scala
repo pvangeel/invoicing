@@ -9,7 +9,10 @@ import anorm._
 
 case class Address(street: String, number: String, postalCode: String, city: String)
 
-case class Customer(id: Option[Long], name: String, address: Address, vat: String)
+case class Customer(id: Option[Long], name: String, address: Address, vat: String) {
+
+  lazy val tetten = "Test Test Test"
+}
 
 object Customer {
 
