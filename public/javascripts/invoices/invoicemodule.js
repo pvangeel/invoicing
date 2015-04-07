@@ -34,23 +34,19 @@ invoiceModule.controller('InvoicesController', ['$scope', '$http', '$location', 
 
                 $scope.$watch('customertypeahead', function(value) {
                    if(angular.isObject(value)) {
-                       $scope.customer = value;
+                       $scope.customer = angular.copy(value);
+                       $scope.$watch('[customer.address, customer.vat]', function() {
+                           if($scope.customer.id && !(angular.equals($scope.customertypeahead.address, $scope.customer.address) && angular.equals($scope.customertypeahead.vat, $scope.customer.vat))) {
+                               delete $scope.customer.id;
+                           }
+                       }, true);
+
                    } else {
                        delete $scope.customer.id;
                        $scope.customer.name = value;
+                       $scope.$watch('customer.address', function() { }, true);
                    }
                 });
-
-                //$scope.$watch('customer.address', function(value) {
-                //    if($scope.customer.id) {
-                //        console.log('deleting id');
-                //        delete $scope.customer.id;
-                //    }
-                //}, true);
-
-                $scope.test = function() {
-                    console.log($scope.customer);
-                }
 
             }]
         }).result.then(function(result) {
