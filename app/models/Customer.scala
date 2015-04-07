@@ -29,6 +29,13 @@ object Customer {
       SQL("select * from customer").as(full *)
   }
 
+  def findByNameLike(query: String) = DB.withConnection {
+    implicit c =>
+      SQL("select * from customer where name ilike {query}")
+        .on('query -> s"%$query%")
+        .as(full *)
+  }
+
   def createOrUpdateCusomer(customer: Customer) = customer match {
     case Customer(Some(id), _, _, _) => updateCustomer(customer)
     case Customer(None, _, _, _) => createCustomer(customer)

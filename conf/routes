@@ -3,13 +3,14 @@
 # ~~~~
 
 # Home page
-GET        /                     controllers.ApplicationController.index
-GET        /products             controllers.ProductsController.productList()
-PUT        /products             controllers.ProductsController.addOrUpdateProduct()
-GET        /customers            controllers.CustomersController.customerList()
-PUT        /customers            controllers.CustomersController.addOrUpdateCustomer()
-GET        /invoices             controllers.InvoicesController.invoicesSummaryList()
+GET        /                        controllers.ApplicationController.index
+GET        /products                controllers.ProductsController.productList()
+PUT        /products                controllers.ProductsController.addOrUpdateProduct()
+GET        /customers               controllers.CustomersController.customerList()
+GET        /customers/search        controllers.CustomersController.findByNameLike(query: String)
+PUT        /customers               controllers.CustomersController.addOrUpdateCustomer()
+GET        /invoices                controllers.InvoicesController.invoicesSummaryList()
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file         controllers.Assets.at(path="/public", file)
-GET        /webjars/*file        controllers.WebJarAssets.at(file)
+GET        /assets/*file            controllers.Assets.at(path="/public", file)
+GET        /webjars/*file           controllers.WebJarAssets.at(file)

@@ -28,6 +28,30 @@ invoiceModule.controller('InvoicesController', ['$scope', '$http', '$location', 
                     $modalInstance.close($scope.customer);
                 };
 
+                $scope.getCustomer = function($viewValue) {
+                    return $http.get('/customers/search?query=' + $viewValue).then(function(response) { return response.data });
+                };
+
+                $scope.$watch('customertypeahead', function(value) {
+                   if(angular.isObject(value)) {
+                       $scope.customer = value;
+                   } else {
+                       delete $scope.customer.id;
+                       $scope.customer.name = value;
+                   }
+                });
+
+                //$scope.$watch('customer.address', function(value) {
+                //    if($scope.customer.id) {
+                //        console.log('deleting id');
+                //        delete $scope.customer.id;
+                //    }
+                //}, true);
+
+                $scope.test = function() {
+                    console.log($scope.customer);
+                }
+
             }]
         }).result.then(function(result) {
 

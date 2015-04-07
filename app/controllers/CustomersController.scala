@@ -10,6 +10,10 @@ object CustomersController extends Controller {
     Ok(toJson(Customer.findAll)).as(JSON)
   }
 
+  def findByNameLike(query: String) = Action { implicit request =>
+    Ok(toJson(Customer.findByNameLike(query))).as(JSON)
+  }
+
   def addOrUpdateCustomer() = Action { implicit request =>
     request.body.asJson.map(_.as[Customer]).map { customer =>
       Ok(toJson(Customer.createOrUpdateCusomer(customer))).as(JSON)
