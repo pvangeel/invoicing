@@ -18,7 +18,7 @@ invoiceModule.controller('InvoicesController', ['$scope', '$http', '$location', 
             templateUrl: 'assets/partials/invoices/create-invoice-modal.html',
             controller: ['$scope', '$modalInstance', function($scope, $modalInstance) {
 
-                $scope.invoice = { customer: {}, invoiceNumber: 'test invoice number', invoiceLines: []};
+                $scope.invoice = { customer: {}, invoiceNumber: 'test invoice number', invoiceLines: [], date: new Date().getMilliseconds()};
 
                 $scope.cancel = function() {
                     $modalInstance.dismiss('cancel');

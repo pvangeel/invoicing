@@ -36,7 +36,7 @@ object Customer {
         .as(full *)
   }
 
-  def createOrUpdateCusomer(customer: Customer) = customer match {
+  def createOrUpdateCustomer(customer: Customer) = customer match {
     case Customer(Some(id), _, _, _) => updateCustomer(customer)
     case Customer(None, _, _, _) => createCustomer(customer)
   }

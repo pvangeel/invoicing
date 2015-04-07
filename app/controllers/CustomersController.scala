@@ -16,7 +16,7 @@ object CustomersController extends Controller {
 
   def addOrUpdateCustomer() = Action { implicit request =>
     request.body.asJson.map(_.as[Customer]).map { customer =>
-      Ok(toJson(Customer.createOrUpdateCusomer(customer))).as(JSON)
+      Ok(toJson(Customer.createOrUpdateCustomer(customer))).as(JSON)
     }.getOrElse(InternalServerError)
 
   }
