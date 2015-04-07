@@ -6,7 +6,7 @@ invoicing.config(['$routeProvider', function ($routeProvider) {
             templateUrl: 'assets/partials/invoices/invoice-list.html',
             controller: 'InvoicesController'
         })
-        .when('/invoices/:invoiceNb', {
+        .when('/invoices/:invoiceId', {
             templateUrl: 'assets/partials/invoices/invoice-detail.html',
             controller: 'InvoiceDetailController'
         })

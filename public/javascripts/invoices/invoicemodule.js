@@ -1,27 +1,46 @@
 
 var invoiceModule = angular.module('InvoiceModule', []);
 
-invoiceModule.controller('InvoicesController', ['$scope', function($scope){
+invoiceModule.controller('InvoicesController', ['$scope', '$http', '$location', '$modal', function($scope, $http, $location, $modal){
 
-    $scope.invoices = [
-        createInvoice(),createInvoice(),createInvoice()
+    $scope.invoices = [];
 
-    ];
+    $http.get('/invoices').then(function(result) {
+        return $scope.invoices = result.data
+    });
 
-    function createInvoice() {
-        return {
-            invoiceNumber: '2013-01',
-            customer: {id: 123, name: 'ntrinsic'},
-            date: new Date(),
-            amount: 1200.99
-        }
+    $scope.getDetail = function(invoice) {
+        $location.path('/invoices/' + invoice.id);
+    };
 
+    $scope.createInvoice = function() {
+        $modal.open({
+            templateUrl: 'assets/partials/invoices/create-invoice-modal.html',
+            controller: ['$scope', '$modalInstance', function($scope, $modalInstance) {
+
+                $scope.customer = {};
+
+                $scope.cancel = function() {
+                    $modalInstance.dismiss('cancel');
+                };
+
+                $scope.ok = function() {
+                    $modalInstance.close($scope.customer);
+                };
+
+            }]
+        }).result.then(function(result) {
+
+                $location.path('/invoices/' + 123);
+            });
     }
 
 }]);
 
 
-invoiceModule.controller('InvoiceDetailController', ['$scope', '$modal', function($scope, $modal){
+invoiceModule.controller('InvoiceDetailController', ['$scope', '$modal', '$routeParams', function($scope, $modal, $routeParams){
+
+    $scope.invoiceId = $routeParams.invoiceId;
 
     $scope.invoice = {
         invoiceNumber: '2013-01',

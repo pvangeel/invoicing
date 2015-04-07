@@ -5,40 +5,20 @@
 <form editable-form name="customerForm">
 
     <div>
-        <label>Name:</label>
-        <span editable-text="invoice.customer.name" e-required e-placeholder="Name">{{ invoice.customer.name }}</span>
-    </div>
-    <div>
-        <label>Address:</label>
         <div>
-            <span editable-text="invoice.customer.address.street" e-required e-placeholder="Street">{{ invoice.customer.address.street }}</span>
-            <span editable-text="invoice.customer.address.number" e-required e-placeholder="Number">{{ invoice.customer.address.number }}</span>
+            <dl>
+                <dt>Name:</dt>
+                <dd>bla bla</dd>
+                <dt>Address:</dt>
+                <dd>bla bla address</dd>
+                <dt>VAT number:</dt>
+                <dd>BE123456789</dd>
+            </dl>
+
         </div>
-        <div>
-            <span editable-text="invoice.customer.address.postalCode" e-required e-placeholder="Postal Code">{{ invoice.customer.address.postalCode }}</span>
-            <span editable-text="invoice.customer.address.city" e-required e-placeholder="City">{{ invoice.customer.address.city }}</span>
-        </div>
-    </div>
-    <div>
-        <label>VAT Number:</label>
-        <span editable-text="invoice.customer.vat" e-required e-placeholder="VAT Number">{{ invoice.customer.vat }}</span>
+        <button class="btn btn-default" ng-click="editCustomer()">Edit customer</button>
     </div>
 
-    <div class="buttons" style="margin-top: 10px;">
-        <!-- button to show form -->
-        <button type="button" class="btn btn-default" ng-click="customerForm.$show()" ng-show="!customerForm.$visible">
-            Edit
-        </button>
-        <!-- buttons to submit / cancel form -->
-      <span ng-show="customerForm.$visible">
-        <button type="submit" class="btn btn-primary" ng-disabled="customerForm.$waiting">
-            Save
-        </button>
-        <button type="button" class="btn btn-default" ng-disabled="customerForm.$waiting" ng-click="customerForm.$cancel()">
-            Cancel
-        </button>
-      </span>
-    </div>
 </form>
 
 <h2>Details</h2>
