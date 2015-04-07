@@ -1,0 +1,28 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()">&times;</button>
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="modal-body">
+    <form name="addCustomer">
+        <div class="form-group">
+            <label>Name:</label>
+            <input type="text" class="form-control" placeholder="Customer name" ng-model="customer.name" required/>
+        </div>
+        <div class="form-group">
+            <label>Address:</label>
+            <input type="text" class="form-control" placeholder="Street" ng-model="customer.address.street" required/>
+            <input type="text" class="form-control" placeholder="Number" ng-model="customer.address.number" required/>
+            <input type="text" class="form-control" placeholder="Postal Code" ng-model="customer.address.postalCode" required/>
+            <input type="text" class="form-control" placeholder="City" ng-model="customer.address.city" required/>
+        </div>
+        <div class="form-group">
+            <label>VAT number:</label>
+            <input type="text" class="form-control" placeholder="VAT number" ng-model="customer.vat" required/>
+        </div>
+    </form>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-disabled="!addCustomer.$valid" ng-click="ok()">Ok</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

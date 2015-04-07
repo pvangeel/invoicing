@@ -4,10 +4,10 @@ import models.Product
 import play.api.libs.json.Json.toJson
 import play.api.mvc.{Controller, Action}
 
-object Products extends Controller {
+object ProductsController extends Controller {
 
   def productList() = Action { implicit request =>
-    Ok(toJson(Product.findAll)).as("application/json")
+    Ok(toJson(Product.findAll)).as(JSON)
   }
 
   def addOrUpdateProduct() = Action { implicit request =>

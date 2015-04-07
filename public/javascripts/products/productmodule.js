@@ -5,7 +5,6 @@ var productModule = angular.module('ProductModule', []);
 
 productModule.controller('ProductsController', ['$scope', '$http', '$modal', function($scope, $http, $modal) {
 
-    //$scope.products = [createProduct(),createProduct(),createProduct()];
     $scope.products = [];
 
     $http.get('/products').then(function(result) {
@@ -16,7 +15,7 @@ productModule.controller('ProductsController', ['$scope', '$http', '$modal', fun
         $modal.open({
             templateUrl: 'assets/partials/products/productmodal.html',
             controller: ['$scope', '$modalInstance', function($scope, $modalInstance) {
-
+                $scope.title = 'Add new product';
                 $scope.product = {};
 
                 $scope.cancel = function() {
@@ -40,7 +39,7 @@ productModule.controller('ProductsController', ['$scope', '$http', '$modal', fun
         $modal.open({
             templateUrl: 'assets/partials/products/productmodal.html',
             controller: ['$scope', '$modalInstance', function($scope, $modalInstance) {
-
+                $scope.title = 'Edit product';
                 $scope.product = angular.copy(product);
 
                 $scope.cancel = function() {
