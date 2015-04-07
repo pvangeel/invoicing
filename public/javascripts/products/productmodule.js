@@ -30,25 +30,36 @@ productModule.controller('ProductsController', ['$scope', '$http', '$modal', fun
             }]
         }).result.then(function(result) {
             console.log(result);
-            //todo: save product to database
-
-                $http.put('/products', result).then(function(response) {
-                    $scope.products.push(response.data);
-                })
-
-
+            $http.put('/products', result).then(function(response) {
+                $scope.products.push(response.data);
+            })
         });
-
     };
 
-    function createProduct() {
-        return {
-            id: 1,
-            description: 'Example product',
-            price: 22.0,
-            vat: 21
-        }
+    $scope.editProduct = function(product) {
+        $modal.open({
+            templateUrl: 'assets/partials/products/productmodal.html',
+            controller: ['$scope', '$modalInstance', function($scope, $modalInstance) {
 
-    }
+                $scope.product = angular.copy(product);
+
+                $scope.cancel = function() {
+                    $modalInstance.dismiss('cancel');
+                };
+
+                $scope.ok = function() {
+                    $modalInstance.close($scope.product);
+                };
+
+            }]
+        }).result.then(function(result) {
+                console.log(result);
+                $http.put('/products', result).then(function(response) {
+                    $scope.products[$scope.products.indexOf(product)] = response.data;
+                })
+            });
+    };
+
+
 
 }]);

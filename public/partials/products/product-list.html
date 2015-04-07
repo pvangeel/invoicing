@@ -7,6 +7,7 @@
         <th>Description</th>
         <th>Price</th>
         <th>VAT</th>
+        <th>Actions</th>
     </thead>
     <tbody>
         <tr ng-repeat="product in products">
@@ -16,6 +17,10 @@
             <td>
                 <span ng-bind="product.vat"></span>
                 <span>%</span>
+            </td>
+            <td>
+                <a class="btn btn-default btn-xs" ng-click="editProduct(product)"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a class="btn btn-default btn-xs" ng-click=""><span class="glyphicon glyphicon-trash"></span></a>
             </td>
         </tr>
     </tbody>
