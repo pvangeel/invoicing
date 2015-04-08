@@ -22,7 +22,7 @@ CREATE TABLE Customer (
 CREATE TABLE Invoice (
   id            SERIAL,
   customerId    INTEGER REFERENCES Customer (id) NOT NULL,
-  invoiceNumber VARCHAR(64)                      NOT NULL UNIQUE,
+  invoiceNumber VARCHAR(64)                      NOT NULL, -- Maybe add unique constraint here? Not sure yet
   date          DATE,
   PRIMARY KEY (id)
 );

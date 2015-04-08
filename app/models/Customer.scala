@@ -29,6 +29,13 @@ object Customer {
       SQL("select * from customer").as(full *)
   }
 
+  def findById(id: Long): Customer = DB.withConnection {
+    implicit c =>
+      SQL("select * from customer where id = {id}")
+        .on('id -> id)
+        .as(full single)
+  }
+
   def findByNameLike(query: String) = DB.withConnection {
     implicit c =>
       SQL("select * from customer where name ilike {query}")

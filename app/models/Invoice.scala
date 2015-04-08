@@ -5,20 +5,42 @@ import org.joda.time.DateTime
 import play.api.db.DB
 import anorm._
 import play.api.Play.current
-import play.api.libs.json.Json
+import play.api.libs.json.{Writes, Reads, Json}
 
 case class InvoiceSummary(id: Long, invoiceNumber: String, customer: String, date: DateTime, total: BigDecimal)
 case class Invoice(id: Option[Long], invoiceNumber: String, customer: Customer, date: DateTime, invoiceLines: Seq[InvoiceLine])
+case class InvoiceLine(id: Option[Long], productId: Long, price: BigDecimal, quantity: Long, vat: BigDecimal)
 
+object InvoiceLine {
+  implicit val InvoiceLineWrites = Json.writes[InvoiceLine]
+  implicit val InvoiceLineReads = Json.reads[InvoiceLine]
+}
 
 object InvoiceSummary {
   implicit val invoiceSummaryWrites = Json.writes[InvoiceSummary]
 }
 
+case class InvoiceNumber(year: String, month: String, sequenceNumber: String) {
+  override def toString = Seq(year, month, sequenceNumber).mkString("-")
+}
+
+object InvoiceNumber {
+  def apply(invoiceNumber: String): InvoiceNumber = {
+    val parts: Array[String] = invoiceNumber.split("-")
+    this(parts(0), parts(1), parts(2))
+  }
+}
+
+
 object Invoice {
+  def getInvoiceLinesForInvoice(id: Long): Seq[InvoiceLine] = Seq()
+
+  implicit val yourJodaDateReads: Reads[DateTime] = Reads.jodaDateReads("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+  implicit val yourJodaDateWrites: Writes[DateTime] = Writes.jodaDateWrites("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
 
   implicit val invoiceWrites = Json.writes[Invoice]
   implicit val invoiceReads = Json.reads[Invoice]
+
 
 
   def createOrUpdateInvoice(invoice: Invoice) = {
@@ -45,8 +67,14 @@ object Invoice {
   }
 
 
-  def updateInvoice(invoice: Invoice) = invoice
+  def updateInvoice(invoice: Invoice) = invoice //TODO: implementeren
 
+  def findById(id: Long) = DB.withConnection {
+    implicit c =>
+      SQL("select * from invoice where invoice.id = {id}")
+        .on('id -> id)
+        .as(full *)
+  }
 
   def findAllSummaries = DB.withConnection {
     implicit c =>
@@ -60,6 +88,12 @@ object Invoice {
   val summary = {
     get[Long]("id") ~ get[String]("invoiceNumber") ~ get[String]("customerName") ~ get[DateTime]("date") ~ get[BigDecimal]("total") map {
       case id ~ invoiceNumber ~ customerName ~ date ~ total => InvoiceSummary(id, invoiceNumber, customerName, date, total)
+    }
+  }
+
+  val full = {
+    get[Long]("id") ~ get[String]("invoiceNumber") ~ get[Long]("customerId") ~ get[DateTime]("date") map {
+      case id ~ invoiceNumber ~ customerId ~ date => Invoice(Option(id), invoiceNumber, Customer.findById(customerId), date, Invoice.getInvoiceLinesForInvoice(id))
     }
   }
 

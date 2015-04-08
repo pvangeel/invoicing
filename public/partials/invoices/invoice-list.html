@@ -8,14 +8,19 @@
         <th>Date</th>
         <th>Customer</th>
         <th>Amount (excl vat)</th>
+        <th>Actions</th>
     </thead>
     <tbody>
-        <tr ng-repeat="invoice in invoices" ng-click="getDetail(invoice)" style="cursor: pointer;">
+        <tr ng-repeat="invoice in invoices">
             <td ng-bind="invoice.id"></td>
             <td ng-bind="invoice.invoiceNumber"></td>
             <td ng-bind="invoice.date | date:'longDate'"></td>
             <td ng-bind="invoice.customer"></td>
             <td ng-bind="invoice.total | currency:'&euro; '"></td>
+            <td>
+                <a class="btn btn-default btn-xs" ng-click="getDetail(invoice)"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a class="btn btn-default btn-xs" ng-click=""><span class="glyphicon glyphicon-trash"></span></a>
+            </td>
         </tr>
     </tbody>
 </table>

@@ -18,7 +18,15 @@ invoiceModule.controller('InvoicesController', ['$scope', '$http', '$location', 
             templateUrl: 'assets/partials/invoices/create-invoice-modal.html',
             controller: ['$scope', '$modalInstance', function($scope, $modalInstance) {
 
-                $scope.invoice = { customer: {}, invoiceNumber: 'test invoice number', invoiceLines: [], date: new Date().getMilliseconds()};
+                $scope.invoice = { customer: {}, invoiceNumber: 'test invoice number', invoiceLines: [], date: new Date()};
+
+                $scope.open = function($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+
+                    $scope.opened = true;
+                };
+
 
                 $scope.cancel = function() {
                     $modalInstance.dismiss('cancel');
@@ -50,10 +58,10 @@ invoiceModule.controller('InvoicesController', ['$scope', '$http', '$location', 
 
             }]
         }).result.then(function(result) {
+                console.log(result)
                 $http.put('/invoices', result).then(function(response) {
-                    console.log(response.data)
+                    $location.path('/invoices/' + response.data.id);
                 });
-                //$location.path('/invoices/' + 123);
             });
     }
 
