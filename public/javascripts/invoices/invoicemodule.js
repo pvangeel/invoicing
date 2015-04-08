@@ -16,9 +16,17 @@ invoiceModule.controller('InvoicesController', ['$scope', '$http', '$location', 
     $scope.createInvoice = function() {
         $modal.open({
             templateUrl: 'assets/partials/invoices/create-invoice-modal.html',
-            controller: ['$scope', '$modalInstance', function($scope, $modalInstance) {
+            controller: ['$scope', '$modalInstance', '$filter', function($scope, $modalInstance, $filter) {
 
-                $scope.invoice = { customer: {}, invoiceNumber: 'test invoice number', invoiceLines: [], date: new Date()};
+                $scope.invoice = { customer: {}, invoiceLines: [], date: new Date()};
+
+
+                $scope.$watch('invoice.date', function(value) {
+                    $http.get('/invoices/nextinvoicenumber?query=' + $filter('date')(value, 'yyyy-MM-')).then(function(response) {
+                        $scope.invoice.invoiceNumber = response.data;
+                    });
+                }, true);
+
 
                 $scope.open = function($event) {
                     $event.preventDefault();
@@ -136,19 +144,8 @@ invoiceModule.controller('InvoiceDetailController', ['$scope', '$http', '$modal'
             });
     };
 
-    function createCustomer() {
-        return {
-            name: 'Ntrinsic Consulting SPRL',
-            vat: 'BE1234567890',
-            address: {
-                street: 'Boulevard Brand Whitlock',
-                number: '114',
-                postalCode: '1200',
-                city: 'Brussels'
-            }
-        }
-
-
+    $scope.testInvoiceNumber = function () {
+        $http.get("/invoices/nextinvoicenumber?query=" + "2015-04-").then(function(response) {console.log(response.data)});
     }
 
     function createProduct(description) {

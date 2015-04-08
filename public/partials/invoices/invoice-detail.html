@@ -46,7 +46,10 @@
             <td ng-bind="invoiceLine.product.description"></td>
             <td ng-bind="invoiceLine.productPrice"></td>
             <td ng-bind="invoiceLine.amount"></td>
-            <td ng-bind="invoiceLine.vat"></td>
+            <td>
+                <span ng-bind="invoiceLine.vat"></span>
+                <span>%</span>
+            </td>
             <td ng-bind="invoiceLine.total | currency:'&euro; '"></td>
             <td>
                 <a class="btn btn-default btn-xs" ng-click="editInvoiceLine(invoiceLine)"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -56,3 +59,6 @@
     </tbody>
 </table>
 <button class="btn btn-default" ng-click="addInvoiceLine()">Add invoice line</button>
+
+
+<button class="btn btn-danger" ng-click="testInvoiceNumber()">TEST</button>

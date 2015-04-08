@@ -33,6 +33,13 @@ object InvoiceNumber {
 
 
 object Invoice {
+  def findLastInvoiceNumberByInvoiceNumberStartsWith(query: String) = DB.withConnection {
+    implicit c =>
+      SQL("select invoiceNumber from invoice where invoice.invoiceNumber like {query}")
+        .on('query -> s"$query%")
+        .as(str("invoiceNumber") singleOpt)
+  }
+
   def getInvoiceLinesForInvoice(invoiceId: Long): Seq[InvoiceLine] = DB.withConnection {
     implicit c =>
       SQL("select * from invoiceline where invoiceId = {invoiceId}")
