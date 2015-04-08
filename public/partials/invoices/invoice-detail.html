@@ -8,9 +8,18 @@
         <div>
             <dl>
                 <dt>Name:</dt>
-                <dd>bla bla</dd>
+                <dd ng-bind="invoice.customer.name"></dd>
                 <dt>Address:</dt>
-                <dd>bla bla address</dd>
+                <dd>
+                    <div>
+                        <span ng-bind="invoice.customer.address.street"></span>
+                        <span ng-bind="invoice.customer.address.number"></span>
+                    </div>
+                    <div>
+                        <span ng-bind="invoice.customer.address.postalCode"></span>
+                        <span ng-bind="invoice.customer.address.city"></span>
+                    </div>
+                </dd>
                 <dt>VAT number:</dt>
                 <dd>BE123456789</dd>
             </dl>

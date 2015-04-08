@@ -53,4 +53,10 @@ object Product {
     implicit c => SQL("select * from product").as(full *)
   }
 
+  def findById(id: Long): Product = DB.withConnection {
+    implicit c => SQL("select * from product where id = {id}")
+      .on('id -> id)
+      .as(full single)
+  }
+
 }

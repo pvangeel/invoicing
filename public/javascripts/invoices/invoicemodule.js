@@ -68,15 +68,13 @@ invoiceModule.controller('InvoicesController', ['$scope', '$http', '$location', 
 }]);
 
 
-invoiceModule.controller('InvoiceDetailController', ['$scope', '$modal', '$routeParams', function($scope, $modal, $routeParams){
+invoiceModule.controller('InvoiceDetailController', ['$scope', '$http', '$modal', '$routeParams', function($scope, $http, $modal, $routeParams){
 
-    $scope.invoiceId = $routeParams.invoiceId;
+    $scope.invoice = {};
 
-    $scope.invoice = {
-        invoiceNumber: '2013-01',
-        customer: createCustomer(),
-        invoiceLines: [createInvoiceLine(),createInvoiceLine(),createInvoiceLine()]
-    };
+    $http.get('/invoices/' + $routeParams.invoiceId).then(function(result) {
+        return $scope.invoice = result.data
+    });
 
     $scope.getProduct = function(viewValue) {
         var newVar = [createProduct('Product one'), createProduct('Product two'), createProduct('Product three')];

@@ -9,7 +9,7 @@ import play.api.libs.json.{Writes, Reads, Json}
 
 case class InvoiceSummary(id: Long, invoiceNumber: String, customer: String, date: DateTime, total: BigDecimal)
 case class Invoice(id: Option[Long], invoiceNumber: String, customer: Customer, date: DateTime, invoiceLines: Seq[InvoiceLine])
-case class InvoiceLine(id: Option[Long], productId: Long, price: BigDecimal, quantity: Long, vat: BigDecimal)
+case class InvoiceLine(id: Option[Long], product: Product, price: BigDecimal, quantity: Long, vat: BigDecimal)
 
 object InvoiceLine {
   implicit val InvoiceLineWrites = Json.writes[InvoiceLine]
@@ -33,7 +33,12 @@ object InvoiceNumber {
 
 
 object Invoice {
-  def getInvoiceLinesForInvoice(id: Long): Seq[InvoiceLine] = Seq()
+  def getInvoiceLinesForInvoice(invoiceId: Long): Seq[InvoiceLine] = DB.withConnection {
+    implicit c =>
+      SQL("select * from invoiceline where invoiceId = {invoiceId}")
+        .on('invoiceId -> invoiceId)
+        .as(fullInvoiceLine *)
+  }
 
   implicit val yourJodaDateReads: Reads[DateTime] = Reads.jodaDateReads("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
   implicit val yourJodaDateWrites: Writes[DateTime] = Writes.jodaDateWrites("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
@@ -73,7 +78,7 @@ object Invoice {
     implicit c =>
       SQL("select * from invoice where invoice.id = {id}")
         .on('id -> id)
-        .as(full *)
+        .as(fullInvoice single)
   }
 
   def findAllSummaries = DB.withConnection {
@@ -91,9 +96,15 @@ object Invoice {
     }
   }
 
-  val full = {
+  val fullInvoice = {
     get[Long]("id") ~ get[String]("invoiceNumber") ~ get[Long]("customerId") ~ get[DateTime]("date") map {
       case id ~ invoiceNumber ~ customerId ~ date => Invoice(Option(id), invoiceNumber, Customer.findById(customerId), date, Invoice.getInvoiceLinesForInvoice(id))
+    }
+  }
+
+  val fullInvoiceLine = {
+    get[Long]("id") ~ get[Long]("productId") ~ get[Int]("quantity") ~ get[BigDecimal]("price") ~ get[BigDecimal]("vat") map {
+      case id ~ productId ~ quantity ~ price ~ vat => InvoiceLine(Option(id), Product.findById(productId), price, quantity, vat)
     }
   }
 
