@@ -1,6 +1,6 @@
 package controllers
 
-import models.{InvoiceNumber, Invoice}
+import models.{InvoiceLine, InvoiceNumber, Invoice}
 import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormat}
 import play.api.libs.json.Json._
@@ -24,6 +24,13 @@ object InvoicesController extends Controller {
 
   def invoiceDetail(id: Long) = Action { implicit request =>
     Ok(toJson(Invoice.findById(id))).as(JSON)
+  }
+
+  def addOrUpdateInvoiceLine(invoiceId: Long) = Action { implicit request =>
+    request.body.asJson.map(_.as[InvoiceLine]).map { invoiceLine =>
+      Ok(toJson(Invoice.createOrUpdateInvoiceLineForInvoice(invoiceId, invoiceLine))).as(JSON)
+    }.getOrElse(InternalServerError)
+
   }
 
   def getNextInvoiceNumberForDate(query: String) = Action { implicit request =>

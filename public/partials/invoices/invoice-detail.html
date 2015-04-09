@@ -44,8 +44,8 @@
     <tbody>
         <tr ng-repeat="invoiceLine in invoice.invoiceLines">
             <td ng-bind="invoiceLine.product.description"></td>
-            <td ng-bind="invoiceLine.productPrice"></td>
-            <td ng-bind="invoiceLine.amount"></td>
+            <td ng-bind="invoiceLine.price"></td>
+            <td ng-bind="invoiceLine.quantity"></td>
             <td>
                 <span ng-bind="invoiceLine.vat"></span>
                 <span>%</span>
@@ -59,6 +59,3 @@
     </tbody>
 </table>
 <button class="btn btn-default" ng-click="addInvoiceLine()">Add invoice line</button>
-
-
-<button class="btn btn-danger" ng-click="testInvoiceNumber()">TEST</button>

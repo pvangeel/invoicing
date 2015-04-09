@@ -93,14 +93,19 @@ invoiceModule.controller('InvoiceDetailController', ['$scope', '$http', '$modal'
     $scope.addInvoiceLine = function() {
         $modal.open({
             templateUrl: 'assets/partials/invoices/invoice-line.html',
-            resolve: { getProduct: function() { return $scope.getProduct }},
-            controller: ['$scope', '$modalInstance', 'getProduct', function($scope, $modalInstance, getProduct) {
+            resolve: {
+                getProduct: function() { return $scope.getProduct },
+                invoice: function() { return $scope.invoice }
+            },
+            controller: ['$scope', '$modalInstance', '$http', 'getProduct', 'invoice', function($scope, $modalInstance, $http, getProduct, invoice) {
 
                 $scope.title = 'Add invoice line';
 
+                $scope.invoice = invoice;
+
                 $scope.getProduct = getProduct;
 
-                $scope.invoiceLine = {};
+                $scope.invoiceLine = { product: { description: 'test product', price: 12.22, vat: 21.00 } };
 
                 $scope.cancel = function() {
                     $modalInstance.dismiss('cancel');
@@ -112,18 +117,24 @@ invoiceModule.controller('InvoiceDetailController', ['$scope', '$http', '$modal'
 
             }]
         }).result.then(function(result) {
-                console.log(result);
-            $scope.invoice.invoiceLines.push(result);
+            $http.put('/invoices/' + $scope.invoice.id + '/invoicelines', result).then(function(response){
+                $scope.invoice.invoiceLines.push(response.data);
+            });
         });
     };
 
     $scope.editInvoiceLine = function(invoiceLine) {
         $modal.open({
             templateUrl: 'assets/partials/invoices/invoice-line.html',
-            resolve: { getProduct: function() { return $scope.getProduct }},
-            controller: ['$scope', '$modalInstance', 'getProduct', function($scope, $modalInstance, getProduct) {
+            resolve: {
+                getProduct: function() { return $scope.getProduct },
+                invoice: function() { return $scope.invoice }
+            },
+            controller: ['$scope', '$modalInstance', '$http', 'getProduct', 'invoice', function($scope, $modalInstance, $http, getProduct, invoice) {
 
                 $scope.title = 'Edit invoice line';
+
+                $scope.invoice = invoice;
 
                 $scope.getProduct = getProduct;
 
@@ -139,8 +150,10 @@ invoiceModule.controller('InvoiceDetailController', ['$scope', '$http', '$modal'
 
             }]
         }).result.then(function(result) {
-                console.log(result);
-                $scope.invoice.invoiceLines[$scope.invoice.invoiceLines.indexOf(invoiceLine)] = result;
+                $http.put('/invoices/' + $scope.invoice.id + '/invoicelines', result).then(function(response){
+                    $scope.invoice.invoiceLines[$scope.invoice.invoiceLines.indexOf(invoiceLine)] = response.data;
+
+                });
             });
     };
 

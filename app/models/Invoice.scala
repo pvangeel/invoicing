@@ -33,9 +33,30 @@ object InvoiceNumber {
 
 
 object Invoice {
+
+  def createInvoiceLine(invoiceId: Long, invoiceLine: InvoiceLine) = DB.withConnection {
+    implicit c =>
+      val product: Product = Product.createOrUpdateProduct(invoiceLine.product)
+      val id: Option[Long]= SQL("insert into invoiceLine(invoiceId, productId, quantity, price, vat) values ({invoiceId}, {productId}, {quantity}, {price}, {vat})")
+        .on('invoiceId -> invoiceId)
+        .on('quantity -> invoiceLine.quantity)
+        .on('productId -> product.id.get)
+        .on('price -> invoiceLine.price)
+        .on('vat -> invoiceLine.vat)
+        .executeInsert()
+      invoiceLine
+  }
+
+  def updateInvoiceLine(invoiceId: Long, line: InvoiceLine) = ???
+
+  def createOrUpdateInvoiceLineForInvoice(invoiceId: Long, invoiceLine: InvoiceLine) = invoiceLine match {
+    case InvoiceLine(Some(id), _, _, _, _) => updateInvoiceLine(invoiceId, invoiceLine)
+    case InvoiceLine(None, _, _, _, _) => createInvoiceLine(invoiceId, invoiceLine)
+  }
+
   def findLastInvoiceNumberByInvoiceNumberStartsWith(query: String) = DB.withConnection {
     implicit c =>
-      SQL("select invoiceNumber from invoice where invoice.invoiceNumber like {query}")
+      SQL("select invoiceNumber from invoice where invoice.invoiceNumber like {query} order by invoiceNumber desc limit 1")
         .on('query -> s"$query%")
         .as(str("invoiceNumber") singleOpt)
   }
