@@ -126,6 +126,11 @@ invoiceModule.controller('InvoiceDetailController', ['$scope', '$http', '$modal'
 
             }]
         }).result.then(function(result) {
+            if(!result.product.id) {
+                result.product.price = result.price;
+                result.product.vat = result.vat;
+            }
+
             $http.put('/invoices/' + $scope.invoice.id + '/invoicelines', result).then(function(response){
                 $scope.invoice.invoiceLines.push(response.data);
             });
