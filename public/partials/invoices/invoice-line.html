@@ -10,8 +10,8 @@
             <input type="text"
                    class="form-control"
                    placeholder="Product description"
-                   ng-model="invoiceLine.product.description"
-                   typeahead="product.description for product in getProduct($viewValue)"
+                   ng-model="producttypeahead"
+                   typeahead="product as product.description for product in getProduct($viewValue)"
                    required/>
         </div>
         <div class="form-group">

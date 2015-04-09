@@ -1,6 +1,6 @@
 package controllers
 
-import models.Product
+import models.{Customer, Product}
 import play.api.libs.json.Json.toJson
 import play.api.mvc.{Controller, Action}
 
@@ -15,6 +15,10 @@ object ProductsController extends Controller {
       Ok(toJson(Product.createOrUpdateProduct(product))).as(JSON)
     }.getOrElse(InternalServerError)
 
+  }
+
+  def findByDescriptionLike(query: String) = Action { implicit request =>
+    Ok(toJson(Product.findByDescriptionLike(query))).as(JSON)
   }
 
 

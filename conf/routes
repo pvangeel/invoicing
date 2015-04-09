@@ -6,6 +6,7 @@
 GET        /                                  controllers.ApplicationController.index
 GET        /products                          controllers.ProductsController.productList()
 PUT        /products                          controllers.ProductsController.addOrUpdateProduct()
+GET        /products/search                   controllers.ProductsController.findByDescriptionLike(query: String)
 GET        /customers                         controllers.CustomersController.customerList()
 GET        /customers/search                  controllers.CustomersController.findByNameLike(query: String)
 PUT        /customers                         controllers.CustomersController.addOrUpdateCustomer()

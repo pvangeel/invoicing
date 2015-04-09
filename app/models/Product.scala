@@ -11,6 +11,12 @@ case class Product(id: Option[Long], description: String, price: BigDecimal, vat
 
 
 object Product {
+  def findByDescriptionLike(query: String) = DB.withConnection {
+    implicit c =>
+      SQL("select * from product where description ilike {query}")
+        .on('query -> s"%$query%")
+        .as(full *)
+  }
 
 
   def createOrUpdateProduct(product: Product) = product match {

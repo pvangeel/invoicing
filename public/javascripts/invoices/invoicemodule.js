@@ -85,9 +85,7 @@ invoiceModule.controller('InvoiceDetailController', ['$scope', '$http', '$modal'
     });
 
     $scope.getProduct = function(viewValue) {
-        var newVar = [createProduct('Product one'), createProduct('Product two'), createProduct('Product three')];
-        console.log(newVar);
-        return newVar;
+        return $http.get('/products/search?query=' + viewValue).then(function(response) { return response.data });
     };
 
     $scope.addInvoiceLine = function() {
@@ -105,7 +103,18 @@ invoiceModule.controller('InvoiceDetailController', ['$scope', '$http', '$modal'
 
                 $scope.getProduct = getProduct;
 
-                $scope.invoiceLine = { product: { description: 'test product', price: 12.22, vat: 21.00 } };
+                $scope.$watch('producttypeahead', function(value) {
+                    if(angular.isObject(value)) {
+                        $scope.invoiceLine.product = angular.copy(value);
+                        $scope.invoiceLine.vat = $scope.invoiceLine.product.vat;
+                        $scope.invoiceLine.price = $scope.invoiceLine.product.price;
+                    } else {
+                        delete $scope.invoiceLine.product.id;
+                        $scope.invoiceLine.product.description = value;
+                    }
+                });
+
+                $scope.invoiceLine = { product: {} };
 
                 $scope.cancel = function() {
                     $modalInstance.dismiss('cancel');
@@ -138,7 +147,22 @@ invoiceModule.controller('InvoiceDetailController', ['$scope', '$http', '$modal'
 
                 $scope.getProduct = getProduct;
 
+                $scope.$watch('producttypeahead', function(value, oldvalue) {
+                    if(value === oldvalue) {
+                        return;
+                    }
+                    if(angular.isObject(value)) {
+                        $scope.invoiceLine.product = angular.copy(value);
+                        $scope.invoiceLine.price = $scope.invoiceLine.product.price;
+                        $scope.invoiceLine.vat = $scope.invoiceLine.product.vat;
+                    } else {
+                        delete $scope.invoiceLine.product.id;
+                        $scope.invoiceLine.product.description = value;
+                    }
+                });
+
                 $scope.invoiceLine = angular.copy(invoiceLine);
+                $scope.producttypeahead = $scope.invoiceLine.product.description;
 
                 $scope.cancel = function() {
                     $modalInstance.dismiss('cancel');
@@ -156,29 +180,5 @@ invoiceModule.controller('InvoiceDetailController', ['$scope', '$http', '$modal'
                 });
             });
     };
-
-    $scope.testInvoiceNumber = function () {
-        $http.get("/invoices/nextinvoicenumber?query=" + "2015-04-").then(function(response) {console.log(response.data)});
-    }
-
-    function createProduct(description) {
-        return {id: 123, description: description, price: 22, vat: 21}
-    }
-
-    function createInvoiceLine() {
-        return {
-            product: {
-                id: 1,
-                description: 'example product description',
-                price: 22.00
-            },
-            productPrice: 40.50,
-            amount: 2,
-            vat: 21,
-            total: 200
-        }
-    }
-
-
 
 }]);
