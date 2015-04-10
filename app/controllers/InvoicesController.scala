@@ -43,4 +43,8 @@ object InvoicesController extends Controller {
     Ok(result)
   }
 
+  def deleteInvoiceLine(invoiceId: Long, invoiceLineId: Long) = Action { implicit request =>
+    Invoice.deleteInvoiceLine(invoiceId, invoiceLineId)
+    Ok
+  }
 }

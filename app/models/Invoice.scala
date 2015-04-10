@@ -34,6 +34,15 @@ object InvoiceNumber {
 
 object Invoice {
 
+  def deleteInvoiceLine(invoiceId: Long, invoiceLineId: Long) = DB.withConnection {
+    implicit c =>
+      SQL("delete from invoiceLine where id = {id} and invoiceId = {invoiceId}")
+      .on('id -> invoiceLineId)
+      .on('invoiceId -> invoiceId)
+      .execute()
+  }
+
+
   def createInvoiceLine(invoiceId: Long, invoiceLine: InvoiceLine) = DB.withConnection {
     implicit c =>
       val product: Product = Product.createOrUpdateProduct(invoiceLine.product)
@@ -44,13 +53,25 @@ object Invoice {
         .on('price -> invoiceLine.price)
         .on('vat -> invoiceLine.vat)
         .executeInsert()
-      invoiceLine
+      InvoiceLine(id, product, invoiceLine.price, invoiceLine.quantity, invoiceLine.vat)
   }
 
-  def updateInvoiceLine(invoiceId: Long, line: InvoiceLine) = ???
+  def updateInvoiceLine(invoiceLine: InvoiceLine) = DB.withConnection {
+    implicit c =>
+      val product: Product = Product.createOrUpdateProduct(invoiceLine.product)
+      SQL("update invoiceLine set (productId, quantity, price, vat) = ({productId}, {quantity}, {price}, {vat}) where id = {id}")
+        .on('id -> invoiceLine.id)
+        .on('productId -> product.id)
+        .on('quantity -> invoiceLine.quantity)
+        .on('price -> invoiceLine.price)
+        .on('vat -> invoiceLine.vat)
+        .executeUpdate()
+
+      InvoiceLine(invoiceLine.id, product, invoiceLine.price, invoiceLine.quantity, invoiceLine.vat)
+  }
 
   def createOrUpdateInvoiceLineForInvoice(invoiceId: Long, invoiceLine: InvoiceLine) = invoiceLine match {
-    case InvoiceLine(Some(id), _, _, _, _) => updateInvoiceLine(invoiceId, invoiceLine)
+    case InvoiceLine(Some(id), _, _, _, _) => updateInvoiceLine(invoiceLine)
     case InvoiceLine(None, _, _, _, _) => createInvoiceLine(invoiceId, invoiceLine)
   }
 
@@ -114,7 +135,7 @@ object Invoice {
       SQL(
         """select invoice.id, invoice.invoiceNumber, customer.name as customerName, invoice.date, COALESCE(SUM(invoiceLine.quantity * invoiceLine.price), 0) as total
           | from invoice left outer join invoiceline on invoice.id = invoiceline.invoiceId, customer where invoice.customerId = customer.id
-          | group by customer.name, invoice.id""".stripMargin)
+          | group by customer.name, invoice.id order by id desc""".stripMargin)
       .as(summary *)
   }
 

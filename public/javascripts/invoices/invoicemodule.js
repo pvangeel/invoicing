@@ -179,11 +179,17 @@ invoiceModule.controller('InvoiceDetailController', ['$scope', '$http', '$modal'
 
             }]
         }).result.then(function(result) {
-                $http.put('/invoices/' + $scope.invoice.id + '/invoicelines', result).then(function(response){
-                    $scope.invoice.invoiceLines[$scope.invoice.invoiceLines.indexOf(invoiceLine)] = response.data;
-
-                });
+            $http.put('/invoices/' + $scope.invoice.id + '/invoicelines', result).then(function(response){
+                $scope.invoice.invoiceLines[$scope.invoice.invoiceLines.indexOf(invoiceLine)] = response.data;
             });
+        });
+
     };
+
+    $scope.deleteInvoiceLine = function(invoiceLine) {
+        $http.delete('/invoices/' + $scope.invoice.id + '/invoicelines/' + invoiceLine.id).then(function() {
+            $scope.invoice.invoiceLines.splice($scope.invoice.invoiceLines.indexOf(invoiceLine), 1);
+        });
+    }
 
 }]);
