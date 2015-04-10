@@ -37,7 +37,7 @@
             <label>VAT number:</label>
             <input type="text" class="form-control" placeholder="VAT number" ng-model="invoice.customer.vat" required/>
         </div>
-
+        <div class="alert alert-info" role="alert" ng-show="!invoice.customer.id && customertypeahead">A new customer will be created if you click ok.</div>
     </form>
 
 </div>
