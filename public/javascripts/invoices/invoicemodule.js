@@ -190,6 +190,61 @@ invoiceModule.controller('InvoiceDetailController', ['$scope', '$http', '$modal'
         $http.delete('/invoices/' + $scope.invoice.id + '/invoicelines/' + invoiceLine.id).then(function() {
             $scope.invoice.invoiceLines.splice($scope.invoice.invoiceLines.indexOf(invoiceLine), 1);
         });
+    };
+
+    $scope.editCustomer = function() {
+        $modal.open({
+            templateUrl: 'assets/partials/invoices/customermodal.html',
+            resolve: {
+                invoice: function() { return $scope.invoice }
+            },
+            controller: ['$scope', '$modalInstance', 'invoice', function($scope, $modalInstance, invoice) {
+                $scope.title = 'Edit customer';
+                $scope.customer = angular.copy(invoice.customer);
+                $scope.customertypeahead = $scope.customer.name;
+                $scope.cancel = function() {
+                    $modalInstance.dismiss('cancel');
+                };
+
+                $scope.ok = function() {
+                    $modalInstance.close($scope.customer);
+                };
+
+                $scope.getCustomer = function(viewValue) {
+                    return $http.get('/customers/search?query=' + viewValue).then(function(response) { return response.data });
+                };
+
+                $scope.$watch('customertypeahead', function(value, oldvalue) {
+                    if(value === oldvalue) {
+                        return;
+                    }
+                    if(angular.isObject(value)) {
+                        $scope.customer = angular.copy(value);
+                        //$scope.invoiceLine.vat = $scope.invoiceLine.product.vat;
+                        //$scope.invoiceLine.price = $scope.invoiceLine.product.price;
+                        $scope.$watch('[customer.address, customer.vat]', function() {
+                            if($scope.customer.id && !(angular.equals($scope.customertypeahead.address, $scope.customer.address) && angular.equals($scope.customertypeahead.vat, $scope.customer.vat))) {
+                                delete $scope.customer.id;
+                            }
+                        }, true);
+                    } else {
+                        delete $scope.customer.id;
+                        $scope.customer.name = value;
+                        $scope.$watch('customer.address', function() { }, true);
+                    }
+                });
+
+
+                $scope.test = function() {
+                    console.log($scope.customer);
+                }
+
+            }]
+        }).result.then(function(result) {
+            //$http.put('/customers', result).then(function(response) {
+            //    $scope.customers[$scope.customers.indexOf(customer)] = response.data;
+            //})
+        });
     }
 
 }]);

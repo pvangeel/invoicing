@@ -51,11 +51,10 @@ customerModule.controller('CustomersController', ['$scope', '$http', '$modal', f
 
             }]
         }).result.then(function(result) {
-                console.log(result);
-                $http.put('/customers', result).then(function(response) {
-                    $scope.customers[$scope.customers.indexOf(customer)] = response.data;
-                })
-            });
+            $http.put('/customers', result).then(function(response) {
+                $scope.customers[$scope.customers.indexOf(customer)] = response.data;
+            })
+        });
     };
 
 
