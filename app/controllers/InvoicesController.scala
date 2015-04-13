@@ -4,7 +4,6 @@ import models.{InvoiceLine, InvoiceNumber, Invoice}
 import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormat}
 import play.api.libs.json.Json._
-import play.api.libs.json.{Reads, Writes}
 import play.api.mvc.{Action, Controller}
 import play.mvc.Security.Authenticated
 
@@ -18,25 +17,25 @@ object InvoicesController extends Controller with Secured {
   }
 
 
-  def addOrUpdateInvoice = Action { implicit request =>
+  def addOrUpdateInvoice = Authenticated { implicit request =>
     request.body.asJson.map(_.as[Invoice]).map { invoice =>
       Ok(toJson(Invoice.createOrUpdateInvoice(invoice))).as(JSON)
     }.getOrElse(InternalServerError)
 
   }
 
-  def invoiceDetail(id: Long) = Action { implicit request =>
+  def invoiceDetail(id: Long) = Authenticated { implicit request =>
     Ok(toJson(Invoice.findById(id))).as(JSON)
   }
 
-  def addOrUpdateInvoiceLine(invoiceId: Long) = Action { implicit request =>
+  def addOrUpdateInvoiceLine(invoiceId: Long) = Authenticated { implicit request =>
     request.body.asJson.map(_.as[InvoiceLine]).map { invoiceLine =>
       Ok(toJson(Invoice.createOrUpdateInvoiceLineForInvoice(invoiceId, invoiceLine))).as(JSON)
     }.getOrElse(InternalServerError)
 
   }
 
-  def getNextInvoiceNumberForDate(query: String) = Action { implicit request =>
+  def getNextInvoiceNumberForDate(query: String) = Authenticated { implicit request =>
     val lastInvoiceNumberForDate: Option[String] = Invoice.findLastInvoiceNumberByInvoiceNumberStartsWith(query)
     val result = lastInvoiceNumberForDate.map {
       lastInvoiceNumber =>
@@ -46,7 +45,7 @@ object InvoicesController extends Controller with Secured {
     Ok(result)
   }
 
-  def deleteInvoiceLine(invoiceId: Long, invoiceLineId: Long) = Action { implicit request =>
+  def deleteInvoiceLine(invoiceId: Long, invoiceLineId: Long) = Authenticated { implicit request =>
     Invoice.deleteInvoiceLine(invoiceId, invoiceLineId)
     Ok
   }

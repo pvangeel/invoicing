@@ -4,6 +4,9 @@
 
 # Home page
 GET           /                                                controllers.ApplicationController.index
+GET           /login                                           controllers.ApplicationController.isLoggedIn
+POST          /login                                           controllers.ApplicationController.login
+GET           /logout                                          controllers.ApplicationController.logout
 GET           /products                                        controllers.ProductsController.productList()
 PUT           /products                                        controllers.ProductsController.addOrUpdateProduct()
 GET           /products/search                                 controllers.ProductsController.findByDescriptionLike(query: String)

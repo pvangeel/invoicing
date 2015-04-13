@@ -37,13 +37,11 @@ invoicing.config(['$routeProvider', '$httpProvider', function ($routeProvider, $
 invoicing.factory('httpInterceptor', function httpInterceptor ($q, $location) {
     return function (promise) {
         var success = function (response) {
-            console.log("success");
             return response;
         };
 
         var error = function (response) {
             if (response.status === 401) {
-                console.log("unauthorized");
                 $location.url('/login');
             }
 

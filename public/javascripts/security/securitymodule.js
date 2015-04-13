@@ -1,8 +1,15 @@
 var securityModule = angular.module('SecurityModule', []);
 
 
-securityModule.controller('LoginController', ['$scope', function($scope) {
+securityModule.controller('LoginController', ['$scope', '$http', '$location', function($scope, $http, $location) {
 
-    console.log("login controller")
+    $scope.login = {};
+
+    $scope.doLogin = function() {
+        $http.post('/login', $scope.login).then(function(response) {
+            $location.path('/invoices');
+
+        })
+    }
 
 }]);
