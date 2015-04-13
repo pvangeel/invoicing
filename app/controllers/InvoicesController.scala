@@ -6,11 +6,14 @@ import org.joda.time.format.{DateTimeFormat}
 import play.api.libs.json.Json._
 import play.api.libs.json.{Reads, Writes}
 import play.api.mvc.{Action, Controller}
+import play.mvc.Security.Authenticated
 
-object InvoicesController extends Controller {
+@Authenticated
+object InvoicesController extends Controller with Secured {
 
 
-  def invoicesSummaryList() = Action { implicit request =>
+  def invoicesSummaryList() = Authenticated { implicit request =>
+    println(request.userName)
     Ok(toJson(Invoice.findAllSummaries)).as(JSON)
   }
 

@@ -1,7 +1,14 @@
-invoicing = angular.module('invoicing', ['ngRoute', 'xeditable', 'ui.bootstrap', 'InvoiceModule', 'CustomerModule', 'ProductModule']);
+invoicing = angular.module('invoicing', ['ngRoute', 'xeditable', 'ui.bootstrap', 'InvoiceModule', 'CustomerModule', 'ProductModule', 'SecurityModule']);
 
-invoicing.config(['$routeProvider', function ($routeProvider) {
+invoicing.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
+
+    $httpProvider.responseInterceptors.push('httpInterceptor');
+
     $routeProvider
+        .when('/login', {
+            templateUrl: 'assets/partials/security/login.html',
+            controller: 'LoginController'
+        })
         .when('/invoices', {
             templateUrl: 'assets/partials/invoices/invoice-list.html',
             controller: 'InvoicesController'
@@ -26,6 +33,26 @@ invoicing.config(['$routeProvider', function ($routeProvider) {
             redirectTo: '/invoices'
         });
 }]);
+
+invoicing.factory('httpInterceptor', function httpInterceptor ($q, $location) {
+    return function (promise) {
+        var success = function (response) {
+            console.log("success");
+            return response;
+        };
+
+        var error = function (response) {
+            if (response.status === 401) {
+                console.log("unauthorized");
+                $location.url('/login');
+            }
+
+            return $q.reject(response);
+        };
+
+        return promise.then(success, error);
+    };
+});
 
 
 invoicing.run(function(editableOptions) {
