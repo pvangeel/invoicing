@@ -19,7 +19,7 @@ object ApplicationController extends Controller {
 
   def login = Action { implicit request =>
     request.body.asJson.map(_.as[LoginForm]).map { login =>
-      Ok.withSession(Security.username -> login.username).as(JSON)
+      Ok(login.username).withSession(Security.username -> login.username).as(JSON)
     }.getOrElse(InternalServerError)
   }
 

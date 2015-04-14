@@ -8,11 +8,9 @@
         <meta name="description" content="">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
-        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/xeditable.css"))'>
 
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/stickyFooter.css")">
-
 
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
@@ -20,8 +18,6 @@
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("angular-route.min.js"))'></script>
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("ui-bootstrap.min.js"))'></script>
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("ui-bootstrap-tpls.min.js"))'></script>
-        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("xeditable.min.js"))'></script>
-
 
         <script type='text/javascript' src='@routes.Assets.at("javascripts/security/securitymodule.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/invoices/invoicemodule.js")'></script>
@@ -32,7 +28,7 @@
     </head>
     <body>
 
-        <nav class="navbar navbar-inverse navbar-fixed-top">
+        <nav class="navbar navbar-inverse navbar-fixed-top" ng-controller="NavbarController">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -54,7 +50,11 @@
                     <div class="navbar-right">
                         <ul class="nav navbar-nav">
                             <li>
-                                <a href="#" ng-click="logout()">Log out</a>
+                                <a href="#" ng-click="logout()" ng-if="isLoggedIn">
+                                    <span>Log out</span>&nbsp;
+                                    <span ng-bind="username"></span>
+                                </a>
+                                <a href="#/login" ng-if="!isLoggedIn">Log in</a>
 
                             </li>
 

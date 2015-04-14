@@ -14,13 +14,13 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
+  "postgresql" % "postgresql" % "9.1-901-1.jdbc4",
+  "org.mindrot" % "jbcrypt" % "0.3m"
 )
 
 libraryDependencies ++= Seq(
   "org.webjars" %% "webjars-play" % "2.3.0",
   "org.webjars" % "angularjs" % "1.2.24",
   "org.webjars" % "bootstrap" % "3.2.0",
-  "org.webjars" % "angular-ui-bootstrap" % "0.12.1-1",
-  "org.webjars" % "angular-xeditable" % "0.1.8"
+  "org.webjars" % "angular-ui-bootstrap" % "0.12.1-1"
 )

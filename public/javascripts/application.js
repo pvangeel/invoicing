@@ -1,4 +1,4 @@
-invoicing = angular.module('invoicing', ['ngRoute', 'xeditable', 'ui.bootstrap', 'InvoiceModule', 'CustomerModule', 'ProductModule', 'SecurityModule']);
+invoicing = angular.module('invoicing', ['ngRoute', 'ui.bootstrap', 'InvoiceModule', 'CustomerModule', 'ProductModule', 'SecurityModule']);
 
 invoicing.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
 
@@ -53,7 +53,25 @@ invoicing.factory('httpInterceptor', function httpInterceptor ($q, $location) {
 });
 
 
-invoicing.run(function(editableOptions) {
-    editableOptions.theme = 'bs3';
+invoicing.run(function($rootScope) {
+    $rootScope.isLoggedIn = false;
 });
+
+invoicing.controller('NavbarController', ['$scope', '$http', '$location', '$rootScope', function($scope, $http, $location, $rootScope) {
+
+
+    $http.get('/login').then(function(response) {
+        $rootScope.isLoggedIn = true;
+        $rootScope.username = response.data;
+    });
+
+    $scope.logout = function() {
+        $http.get('/logout').then(function(response) {
+            $rootScope.isLoggedIn = false;
+            $rootScope.username = '';
+            $location.path('/login');
+        });
+    }
+
+}]);
 
